@@ -3,9 +3,10 @@ import fs from "fs";
 const prepFile = function (file: string): string[] {
   //const fs = require("fs");
   const fileToString: string = fs.readFileSync(file).toString();
-  const calibrationvalues: string[] = fileToString.split("\n");
-  //const calibrationvalues: string[] = fileToString.split(/\r\n/);
+  //const calibrationvalues: string[] = fileToString.split("\n");
+  const calibrationvalues: string[] = fileToString.split(/\r\n/);
   calibrationvalues.pop();
+  //console.log(calibrationvalues);
   return calibrationvalues;
 };
 
@@ -186,16 +187,17 @@ const calculateSingleCalibrationWithStrings = function (line: string): number {
       indexes[indexes.length - 1].value.toString();
     break;
   }
+  // console.log(value);
   return Number(value);
 };
 
 const totalCalibrationValueSecond = function (file: string): number {
   const values: string[] = prepFile(file);
   let totalvalue: number = 0;
-  values.forEach(
-    (line) =>
-      (totalvalue = totalvalue + calculateSingleCalibrationWithStrings(line)),
-  );
+  values.forEach((line) => {
+    const lineValue = calculateSingleCalibrationWithStrings(line);
+    totalvalue = totalvalue + lineValue;
+  });
   return totalvalue;
 };
 
